@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Resume Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .no-result {
+            color: #777;
+            font-style: italic;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* For larger screen adjustments */
+        @media (min-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 20px;
+            }
+        }
+
+        /* Ensure that the table content is nicely aligned */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Bulk Resume Upload</h1>
+
+    <div class="form-container">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="resumes" multiple><br><br>
+            <button type="submit">Upload Resumes</button>
+        </form>
+    </div>
+
+    {% if result %}
+    <h2>Processed Results</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Education</th>
+                    <th>DOB</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Experience</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in result %}
+                <tr>
+                    <td>{{ item.filename }}</td>
+                    <td>{{ item.name if item.name else 'None' }}</td>
+                    <td>{{ item.email if item.email else 'None' }}</td>
+                    <td>{{ item.phone if item.phone else 'None' }}</td>
+                    <td>{{ item.education if item.education else 'None' }}</td>
+                    <td>{{ item.dob if item.dob else 'None' }}</td>
+                    <td>{{ item.age if item.age else 'None' }}</td>
+                    <td>{{ item.gender if item.gender else 'None' }}</td>
+                    <td>{{ item.experience if item.experience else 'None' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="no-result">No results to display yet. Please upload resumes.</p>
+    {% endif %}
+
+    {% if error %}
+    <p class="error-message">{{ error }}</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
